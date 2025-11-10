@@ -1,6 +1,5 @@
 package pambatch.swing;
 
-import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,9 +36,11 @@ public class ViewerSetDialog extends BatchSetDialog {
 	
 	private String[] dbEnds = {".sqlite", ".sqlite3"};
 	private ArrayList<BatchJobInfo> foundSets;
+	private BatchControl batchControl;
 
 	private ViewerSetDialog(Window guiFrame, BatchControl batchControl) {
 		super(guiFrame, "Generate multiple jobs", false);
+		this.batchControl = batchControl;
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		mainPanel.setBorder(new TitledBorder("Root folder for multiple Viewer databases"));
 		GridBagConstraints c = new PamGridBagContraints();
@@ -238,9 +239,15 @@ public class ViewerSetDialog extends BatchSetDialog {
 			int done = 0;
 			for (int i = 0; i < dbFiles.length; i++) {
 				this.publish(done);
-				BatchJobInfo jobSet = ViewerDatabase.extractJobInfo(dbFiles[i].getAbsolutePath());
-				if (jobSet != null) {
-					jobSets.add(jobSet);
+				try {
+					BatchJobInfo jobSet = ViewerDatabase.extractJobInfo(batchControl, dbFiles[i].getAbsolutePath());
+					if (jobSet != null) {
+						jobSets.add(jobSet);
+					}
+				}
+				catch (Exception e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
 				}
 				done++;
 			}

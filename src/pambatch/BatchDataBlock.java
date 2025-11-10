@@ -1,6 +1,7 @@
 package pambatch;
 
 import PamguardMVC.PamDataBlock;
+import PamguardMVC.PamObserver;
 
 public class BatchDataBlock extends PamDataBlock<BatchDataUnit> {
 
@@ -21,6 +22,17 @@ public class BatchDataBlock extends PamDataBlock<BatchDataUnit> {
 	@Override
 	protected int removeOldUnitsS(long mastrClockSample) {
 		return 0;
+	}
+
+	@Override
+	public void addObserver(PamObserver o, boolean reThread) {
+		super.addObserver(o, reThread);
+	}
+
+	@Override
+	public void addObserver(PamObserver o) {
+		// TODO Auto-generated method stub
+		super.addObserver(o);
 	}
 
 }

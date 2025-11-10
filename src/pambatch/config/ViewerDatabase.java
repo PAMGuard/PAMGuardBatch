@@ -303,8 +303,8 @@ public class ViewerDatabase {
 	 * @param databaseFile
 	 * @return
 	 */
-	public static BatchJobInfo extractJobInfo(String databaseFile) {
-		ViewerDatabase viewDB = new ViewerDatabase(null, databaseFile);
+	public static BatchJobInfo extractJobInfo(BatchControl batchControl, String databaseFile) {
+		ViewerDatabase viewDB = new ViewerDatabase(batchControl, databaseFile);
 		String soundFolder = null;
 		String binFolder = null;
 		PamSettingsGroup allSettings = viewDB.getSettings();
@@ -347,7 +347,7 @@ public class ViewerDatabase {
 		if (array == null) {
 			return false; // don't ever write a null array to one of the databases. 
 		}
-		ViewerDatabase viewDB = new ViewerDatabase(null, dbName);
+		ViewerDatabase viewDB = new ViewerDatabase(batchControl, dbName);
 		PamSettingsGroup allSettings = viewDB.getSettings();
 		if (allSettings == null) {
 			return false;

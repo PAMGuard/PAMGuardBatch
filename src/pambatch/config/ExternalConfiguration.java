@@ -377,6 +377,9 @@ public class ExternalConfiguration implements SettingsObserver {
 			return null;
 		}
 		PamControlledUnitSettings metaSettings = settingsGroup.findUnitSettings(MetaDataContol.unitType, MetaDataContol.unitType);
+		if (metaSettings == null) {
+			return null;
+		}
 		if (metaSettings.getSettings() instanceof PamguardMetaData) {
 			return (PamguardMetaData) metaSettings.getSettings();
 		}
