@@ -100,7 +100,10 @@ public class ViewerSetDialog extends BatchSetDialog {
 	@Override
 	protected void selectButton(int i) {		
 		PamFileChooser fc = getSharedChooser();
+		PamFileFilter filter;
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setFileFilter(filter = new PamFileFilter("Database files", ".sqlite3"));
+		filter.setAcceptFolders(true);
 
 		File startLoc = null;
 		if (jobSets[DATABASE].getText() != null) {
@@ -148,6 +151,9 @@ public class ViewerSetDialog extends BatchSetDialog {
 		}
 		String dbName = dbControl.getDatabaseName();
 		if (dbName == null) {
+			return null;
+		}
+		if (dbFiles == null || dbFiles.length == 0) {
 			return null;
 		}
 		File[] newList = new File[dbFiles.length]; 
@@ -244,12 +250,12 @@ public class ViewerSetDialog extends BatchSetDialog {
 					if (jobSet != null) {
 						jobSets.add(jobSet);
 					}
+					done++;
 				}
 				catch (Exception e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 				}
-				done++;
 			}
 			this.publish(done);
 			return done;

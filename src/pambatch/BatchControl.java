@@ -1,13 +1,10 @@
 package pambatch;
 
-import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.URL;
@@ -19,39 +16,27 @@ import java.nio.file.PathMatcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Optional;
 import java.util.Random;
 
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
-
-import org.w3c.dom.Document;
 
 import Acquisition.FolderInputSystem;
 import Acquisition.pamAudio.PamAudioFileFilter;
 import Array.ArrayDialog;
 import Array.ArrayManager;
-import Array.ArrayParameters;
 import Array.PamArray;
 import PamController.PSFXReadWriter;
 import PamController.PamControlledUnit;
 import PamController.PamControlledUnitSettings;
 import PamController.PamController;
+import PamController.PamControllerInterface;
 import PamController.PamGUIManager;
 import PamController.PamSettingManager;
 import PamController.PamSettings;
 import PamController.PamSettingsGroup;
-import PamController.command.BatchCommand;
 import PamController.command.BatchStatusCommand;
-import PamController.command.CommandManager;
 import PamController.command.ExitCommand;
-import PamController.command.SetSerializedSettingsCommand;
-import PamController.command.SetXMLSettings;
-import PamController.command.StartCommand;
-import PamController.command.TerminalController;
 import PamController.fileprocessing.ReprocessStoreChoice;
-import PamController.settings.output.xml.PamguardXMLWriter;
-import PamUtils.PamFileChooser;
 import PamUtils.PamFileFilter;
 import PamView.PamTabPanel;
 import PamView.dialog.warn.WarnOnce;
@@ -75,10 +60,9 @@ import pambatch.ctrl.BatchState;
 import pambatch.ctrl.BatchStateObserver;
 import pambatch.ctrl.JobController;
 import pambatch.remote.RemoteAgentHandler;
-import pambatch.swing.NormalSetDialog;
 import pambatch.swing.BatchTabPanel;
 import pambatch.swing.CheckExistingDialog;
-import pambatch.swing.JobDialog;
+import pambatch.swing.NormalSetDialog;
 import pambatch.swing.OfflineJobDialog;
 import pambatch.swing.OnlineJobDialog;
 import pambatch.swing.SwingMenus;
@@ -197,13 +181,13 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 	@Override
 	public void notifyModelChanged(int changeType) {
 		super.notifyModelChanged(changeType);
-		if (changeType == PamController.INITIALIZATION_COMPLETE) {
+		if (changeType == PamControllerInterface.INITIALIZATION_COMPLETE) {
 			updateObservers(BatchState.INITIALISATIONCOMPLETE);
 			loadExistingJobs(); // loads from database
 			checkRunningJobs();
 			externalConfiguration.settingsUpdate(SettingsObservers.CHANGE_CONFIG);
 		}
-		if (changeType == PamController.PROJECT_META_UPDATE) {
+		if (changeType == PamControllerInterface.PROJECT_META_UPDATE) {
 			intlMetaDataUpdate();
 		}
 	}
@@ -430,7 +414,7 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 		 * so find the ini file and read from there ...
 		 * 
 		 */
-		if (root.exists() == false) {
+		if (!root.exists()) {
 			return null;
 		}
 		String pattern = "glob:" + filePattern;
@@ -663,7 +647,7 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 		}
 		String path = checkDatabasePath(outputDatabaseName);
 		File dbFile = new File(path);
-		if (dbFile.exists() == false) {
+		if (!dbFile.exists()) {
 			WarnOnce.showWarning("Can't launch PAMGuard viewer", "The database " + path + " does not exist", WarnOnce.WARNING_MESSAGE);
 			return;
 		}
@@ -868,7 +852,7 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 		ArrayList<OfflineTaskDataUnit> allTasks = externalConfiguration.getTaskDataBlock().getDataCopy();
 		for (OfflineTaskDataUnit aTaskUnit : allTasks) {
 			TaskSelection sel = batchParameters.getTaskSelection(aTaskUnit.getOfflineTask());
-			if (sel.selected == false) {
+			if (!sel.selected) {
 				continue;
 			}
 			command.add(OfflineTaskManager.commandFlag);
@@ -1560,7 +1544,7 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 	 */
 	public boolean taskSettings(MouseEvent e, OfflineTaskDataUnit taskDataUnit) {
 		OfflineTask offlineTask = taskDataUnit.getOfflineTask();
-		if (offlineTask == null || offlineTask.hasSettings() == false) {
+		if (offlineTask == null || !offlineTask.hasSettings()) {
 			return false; // nothing to be done anyway. 
 		}
 		PamControlledUnit parentModule = offlineTask.getParentControlledUnit();
@@ -1685,7 +1669,7 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 		boolean useTethys = false;
 		for (OfflineTaskDataUnit taskUnit : checkedTasks) {
 			OfflineTask aTask = taskUnit.getOfflineTask();
-			if (aTask.canRun() == false) {
+			if (!aTask.canRun()) {
 				String whyNot = aTask.whyNot();
 				if (whyNot == null) {
 					whyNot = "Unknown reason";

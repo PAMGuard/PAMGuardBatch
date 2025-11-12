@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import PamUtils.PamFileChooser;
+import PamUtils.PamFolderChooser;
 import PamView.dialog.PamDialog;
 
 
@@ -86,6 +87,7 @@ public abstract class BatchSetDialog extends PamDialog{
 	PamFileChooser getSharedChooser() {
 		if (sharedChooser == null) {
 			sharedChooser = new PamFileChooser();
+//			sharedChooser.setCheckParent(true);
 		}
 		return sharedChooser;
 	}
