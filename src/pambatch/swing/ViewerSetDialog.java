@@ -1,6 +1,5 @@
 package pambatch.swing;
 
-import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -245,8 +244,8 @@ public class ViewerSetDialog extends BatchSetDialog {
 		protected Integer doInBackground() throws Exception {
 			int done = 0;
 			for (int i = 0; i < dbFiles.length; i++) {
+				this.publish(done);
 				try {
-					this.publish(done);
 					BatchJobInfo jobSet = ViewerDatabase.extractJobInfo(batchControl, dbFiles[i].getAbsolutePath());
 					if (jobSet != null) {
 						jobSets.add(jobSet);
@@ -254,6 +253,7 @@ public class ViewerSetDialog extends BatchSetDialog {
 					done++;
 				}
 				catch (Exception e) {
+					System.out.println(e.getMessage());
 					e.printStackTrace();
 				}
 			}

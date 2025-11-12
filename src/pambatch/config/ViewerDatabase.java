@@ -347,7 +347,7 @@ public class ViewerDatabase {
 		if (array == null) {
 			return false; // don't ever write a null array to one of the databases. 
 		}
-		ViewerDatabase viewDB = new ViewerDatabase(null, dbName);
+		ViewerDatabase viewDB = new ViewerDatabase(batchControl, dbName);
 		PamSettingsGroup allSettings = viewDB.getSettings();
 		if (allSettings == null) {
 			return false;
