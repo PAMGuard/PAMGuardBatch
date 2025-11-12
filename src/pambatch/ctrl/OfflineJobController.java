@@ -101,6 +101,9 @@ public class OfflineJobController extends LocalJobController {
 		/*
 		 * Now go through the selected jobs and check all their settings from the current psfx in the binSettings and
 		 * push those settings into binSettings.  
+		 * This next bit just sets the settings for individual tasks and tries to add modules referenced by 
+		 * those tasks. however, it doesn't help if that task requires other modules to be in place, eg. a Tethys
+		 * task here will add the Tethys module, but not any required upstream modules that might have the actual data. 
 		 */
 		ExternalConfiguration externalConfiguration = getBatchControl().getExternalConfiguration();
 		OfflineTaskDataBlock taskBlock = externalConfiguration.getTaskDataBlock();
