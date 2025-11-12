@@ -303,8 +303,8 @@ public class ViewerDatabase {
 	 * @param databaseFile
 	 * @return
 	 */
-	public static BatchJobInfo extractJobInfo(String databaseFile) {
-		ViewerDatabase viewDB = new ViewerDatabase(null, databaseFile);
+	public static BatchJobInfo extractJobInfo(BatchControl batchControl, String databaseFile) {
+		ViewerDatabase viewDB = new ViewerDatabase(batchControl, databaseFile);
 		String soundFolder = null;
 		String binFolder = null;
 		PamSettingsGroup allSettings = viewDB.getSettings();

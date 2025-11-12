@@ -37,9 +37,11 @@ public class ViewerSetDialog extends BatchSetDialog {
 	
 	private String[] dbEnds = {".sqlite", ".sqlite3"};
 	private ArrayList<BatchJobInfo> foundSets;
+	private BatchControl batchControl;
 
 	private ViewerSetDialog(Window guiFrame, BatchControl batchControl) {
 		super(guiFrame, "Generate multiple jobs", false);
+		this.batchControl = batchControl;
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		mainPanel.setBorder(new TitledBorder("Root folder for multiple Viewer databases"));
 		GridBagConstraints c = new PamGridBagContraints();
@@ -99,7 +101,10 @@ public class ViewerSetDialog extends BatchSetDialog {
 	@Override
 	protected void selectButton(int i) {		
 		PamFileChooser fc = getSharedChooser();
+		PamFileFilter filter;
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setFileFilter(filter = new PamFileFilter("Database files", ".sqlite3"));
+		filter.setAcceptFolders(true);
 
 		File startLoc = null;
 		if (jobSets[DATABASE].getText() != null) {
@@ -147,6 +152,9 @@ public class ViewerSetDialog extends BatchSetDialog {
 		}
 		String dbName = dbControl.getDatabaseName();
 		if (dbName == null) {
+			return null;
+		}
+		if (dbFiles == null || dbFiles.length == 0) {
 			return null;
 		}
 		File[] newList = new File[dbFiles.length]; 
@@ -237,12 +245,17 @@ public class ViewerSetDialog extends BatchSetDialog {
 		protected Integer doInBackground() throws Exception {
 			int done = 0;
 			for (int i = 0; i < dbFiles.length; i++) {
-				this.publish(done);
-				BatchJobInfo jobSet = ViewerDatabase.extractJobInfo(dbFiles[i].getAbsolutePath());
-				if (jobSet != null) {
-					jobSets.add(jobSet);
+				try {
+					this.publish(done);
+					BatchJobInfo jobSet = ViewerDatabase.extractJobInfo(batchControl, dbFiles[i].getAbsolutePath());
+					if (jobSet != null) {
+						jobSets.add(jobSet);
+					}
+					done++;
 				}
-				done++;
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			this.publish(done);
 			return done;

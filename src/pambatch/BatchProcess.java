@@ -2,10 +2,6 @@ package pambatch;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +20,6 @@ import pambatch.ctrl.JobController;
 import pambatch.ctrl.JobMonitor;
 import pambatch.logging.BatchLogging;
 import pambatch.remote.RemoteAgentDataUnit;
-import warnings.PamWarning;
-import warnings.WarningSystem;
 
 public class BatchProcess extends PamProcess implements JobMonitor {
 
@@ -163,7 +157,7 @@ public class BatchProcess extends PamProcess implements JobMonitor {
 //			
 //			}
 			
-			if (machineParams.isEnabled() == false) {
+			if (!machineParams.isEnabled()) {
 				return false;
 			}
 			if (nRunning >= machineParams.maxJobs) {////batchControl.getBatchParameters().getMaxConcurrentJobs()) {
