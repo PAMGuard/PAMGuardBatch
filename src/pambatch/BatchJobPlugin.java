@@ -39,17 +39,17 @@ public class BatchJobPlugin implements PamPluginInterface {
 
 	@Override
 	public String getVersion() {
-		return "2.0";
+		return "2.1";
 	}
 
 	@Override
 	public String getPamVerDevelopedOn() {
-		return "2.02.16";
+		return "2.02.17";
 	}
 
 	@Override
 	public String getPamVerTestedOn() {
-		return "2.02.15e";
+		return "2.02.17";
 	}
 
 	@Override
