@@ -1171,7 +1171,7 @@ final public class PamModel implements PamSettings {
 		 * PamModel !
 		 */
 		
-		pluginList.add(new BatchJobPlugin());
+//		pluginList.add(new BatchJobPlugin());
 
 		// Load up whatever default classloader was used to create this class.  Must use the same classloader
 		// for all plugins, or else we will not be able to create proper dependencies between them or be able

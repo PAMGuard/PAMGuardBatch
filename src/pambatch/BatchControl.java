@@ -190,7 +190,16 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 		if (changeType == PamControllerInterface.PROJECT_META_UPDATE) {
 			intlMetaDataUpdate();
 		}
+		if (getPamController().isInitializationComplete()) {
+			if (changeType == PamControllerInterface.ADD_CONTROLLEDUNIT) {
+				maybeLoadExistingJobs(); // loads from database
+			}
+			if (changeType == PamControllerInterface.CHANGED_PROCESS_SETTINGS) {
+				maybeLoadExistingJobs(); // loads from database
+			}
+		}
 	}
+
 
 	/**
 	 * Meta data in this batch processor config has been changed. Should this
@@ -985,6 +994,18 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 		return  BinaryStore.findBinaryStoreControl();
 	}
 
+	/**
+	 * Try loading existing jobs again, but only if there aren't any 
+	 * in the current jobs list. 
+	 */
+	private void maybeLoadExistingJobs() {
+	// just do this if the current jobs list is empty. Can happen when setting up 
+		// for the first time
+		if (batchProcess.getBatchDataBlock().getUnitsCount() == 0) {
+			loadExistingJobs();
+		}
+	}
+	
 	/**
 	 * Load all existing jobs from database. 
 	 */
