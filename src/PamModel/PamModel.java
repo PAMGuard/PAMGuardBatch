@@ -499,10 +499,10 @@ final public class PamModel implements PamSettings {
 			
 		}		
 
-		mi = PamModuleInfo.registerControlledUnit(BatchControl.class.getName(), BatchControl.unitType);
-		mi.setToolTipText("Batch processing control");
-		mi.setModulesMenuGroup(utilitiesGroup);
-		mi.setMaxNumber(1);
+//		mi = PamModuleInfo.registerControlledUnit(BatchControl.class.getName(), BatchControl.unitType);
+//		mi.setToolTipText("Batch processing control");
+//		mi.setModulesMenuGroup(utilitiesGroup);
+//		mi.setMaxNumber(1);
 		/*
 		 * ************* End Utilities  Group *******************
 		 */
@@ -1171,7 +1171,7 @@ final public class PamModel implements PamSettings {
 		 * PamModel !
 		 */
 		
-//		pluginList.add(new BatchJobPlugin());
+		pluginList.add(new BatchJobPlugin());
 
 		// Load up whatever default classloader was used to create this class.  Must use the same classloader
 		// for all plugins, or else we will not be able to create proper dependencies between them or be able
@@ -1397,7 +1397,7 @@ final public class PamModel implements PamSettings {
 						
 						// instantiate the plugin control class using the custom class loader
 						try {
-							File classFile = new File(pf.getJarFile());		
+//							File classFile = new File(pf.getJarFile());		
 							//URLClassLoader cl = new URLClassLoader(new URL[]{classFile.toURI().toURL()});
 //							mi = PamModuleInfo.registerControlledUnit(pf.getClassName(), pf.getDescription(),cl);
 							mi = PamModuleInfo.registerControlledUnit(pf.getClassName(), pf.getDescription(),classLoader);

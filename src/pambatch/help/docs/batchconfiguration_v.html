@@ -172,6 +172,13 @@
 			be applied to all jobs (apart from any already running).</li>
 	</ol>
 	
+	<h3>Project Information (Project Metadata)</h3>
+	<p>It is assumed that all jobs in a set will want to share the same project information (metadata). This is 
+	particularly important if you're exporting data to a Tethys database.</p>
+	<p>As each job starts, the project information will be copied from the batch configuration to each job. It is therefore important
+	that the information in the batch configuration is up to date. If, at any point, you edit this information in the 
+	external configuration, then you will be asked if you want to copy it to the batch configuration. </p>
+	<p><img src="images/copymetadata.png"></p>
 
 	<br>
 	<p CLASS="prevLink">

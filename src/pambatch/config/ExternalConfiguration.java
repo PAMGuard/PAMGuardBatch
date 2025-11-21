@@ -24,6 +24,8 @@ import PamView.dialog.warn.WarnOnce;
 import metadata.MetaDataContol;
 import metadata.PamguardMetaData;
 import nilus.Deployment;
+import nilus.DescriptionType;
+import nilus.ResponsibleParty;
 import offlineProcessing.OfflineTask;
 import offlineProcessing.OfflineTaskManager;
 import pambatch.BatchControl;
@@ -395,12 +397,95 @@ public class ExternalConfiguration implements SettingsObserver {
 		if (metaControl == null || extMetaData == null) {
 			return;
 		}
-		int ans = WarnOnce.showWarning("External configuratin metadata", 
-				"Do you want to copy external meta data to the internal data within tha batch processor configuration ?",
-				WarnOnce.YES_NO_OPTION);
+		boolean exNew = externalNewer(metaControl.getMetaData(), extMetaData);
+		if (exNew == false) {
+			return;
+		}
+		String hp = "docs.batchconfiguration_v";
+		int ans = WarnOnce.showWarning("External configuration metadata", 
+				"Do you want to copy project data from the external configuration ?",
+				WarnOnce.YES_NO_OPTION, hp);
 		if (ans == WarnOnce.OK_OPTION) {
 			metaControl.setMetaData(extMetaData);
 		}
+	}
+	
+	/**
+	 * work out if the external configs metadata are newer than the internal metadata 
+	 * Also that the external data actually exist and are completer. 
+	 * @param internal
+	 * @param external
+	 * @return
+	 */
+	private boolean externalNewer(PamguardMetaData internal, PamguardMetaData external) {
+		if (external == null) {
+			return false;
+		}
+		if (internal == null) {
+			return true;
+		}
+		// check the external data are complete. 
+		Deployment dep = external.getDeployment();
+		if (mtDeployment(dep)) {
+			return false;
+		}
+		
+		return external.getLastModified() > internal.getLastModified();
+	}
+	
+	/**
+	 * Are the useful fields of the deployment document empty ? 
+	 * @param dep
+	 * @return
+	 */
+	private boolean mtDeployment(Deployment dep) {
+		if (dep == null) {
+			return true;
+		}
+		if (!mtString(dep.getCruise())) {
+			return false;
+		}
+		if (!mtString(dep.getRegion())) {
+			return false;
+		}
+		if (!mtString(dep.getSite())) {
+			return false;
+		}
+		if (!mtString(dep.getProject())) {
+			return false;
+		}
+		ResponsibleParty contact = dep.getMetadataInfo().getContact();
+		if (contact != null) {
+			if (!mtString(contact.getIndividualName())) {
+				return false;
+			}
+			if (!mtString(contact.getOrganizationName())) {
+				return false;
+			}
+			if (!mtString(contact.getPositionName())) {
+				return false;
+			}
+			// should probably also check email ...
+		}
+		DescriptionType desc = dep.getDescription();
+		if (desc != null) {
+			if (!mtString(desc.getObjectives())) {
+				return false;
+			}
+			if (!mtString(desc.getAbstract())) {
+				return false;
+			}
+			if (!mtString(desc.getMethod())) {
+				return false;
+			}
+		}
+		
+		// everything is empty !
+		return true;
+	}
+	
+	private boolean mtString(String str) {
+		return str == null || str.length() == 0;
 	}
 	
 
