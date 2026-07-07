@@ -32,7 +32,6 @@ import PamView.dialog.PamLabel;
 import PamView.dialog.PamTextField;
 import PamView.help.PamHelp;
 import PamView.panel.PamPanel;
-import nidaqdev.networkdaq.Shell;
 import pambatch.BatchControl;
 import pambatch.config.BatchMode;
 import pambatch.config.BatchParameters;

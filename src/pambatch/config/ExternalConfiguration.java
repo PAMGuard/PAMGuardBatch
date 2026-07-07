@@ -174,6 +174,10 @@ public class ExternalConfiguration implements SettingsObserver {
 
 		PamModel pamModel = PamController.getInstance().getModelInterface();
 		for (UsedModuleInfo unit : modulesList) {
+			if (unit.className.equals(BatchControl.class.getName())) {
+				System.out.println("The RUN configuration cannot contain a batch processing module");
+				continue;
+			}
 			if (unit.className.contains("tethys")) {
 				System.out.println("Add Tethys");
 			}

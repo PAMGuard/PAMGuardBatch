@@ -46,6 +46,8 @@ public class RemoteAgentHandler implements BatchStateObserver {
 	private Timer agentPingTimer;
 
 	private MulticastSocket datagramSocket;
+	
+	private boolean initialisationComplete = false;
 
 	private InetAddress mcIPAddress;
 	
@@ -97,8 +99,14 @@ public class RemoteAgentHandler implements BatchStateObserver {
 	public void update(BatchState batchState, Object data) {
 		switch (batchState) {
 		case INITIALISATIONCOMPLETE:
-		case NEWSETTING:
+			initialisationComplete = true;
 			restartSocket();
+			break;
+		case NEWSETTING:
+			if (initialisationComplete) {
+				restartSocket();
+			}
+			break;
 		case JOBFINISH:
 		case JOBSTART:
 			
