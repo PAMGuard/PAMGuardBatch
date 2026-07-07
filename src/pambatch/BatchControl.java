@@ -46,6 +46,7 @@ import generalDatabase.DBControl;
 import generalDatabase.DBControlUnit;
 import metadata.MetaDataContol;
 import metadata.PamguardMetaData;
+import networkTransfer.send.NetSendCommandParam;
 import networkTransfer.send.NetworkSender;
 import offlineProcessing.OfflineTask;
 import offlineProcessing.OfflineTaskManager;
@@ -105,6 +106,9 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 	private PSFXMonitor psfxMonitor;
 	
 	private OfflineTaskFunctions offlineTaskFunctions;
+	
+	private static final String NETJOBID1 = NetSendCommandParam.ID1.toString();
+	private static final String NETJOBID2 = NetSendCommandParam.ID2.toString();
 
 	/**
 	 * @return the batchProcess
@@ -846,10 +850,12 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 		command.add("-multicast");
 		command.add(batchParameters.getMulticastAddress());
 		command.add(String.format("%d", batchParameters.getMulticastPort()));
-		command.add(NetworkSender.ID1);
+//		command.add(NetworkSender.ID1);
+		command.add(NETJOBID1);
 		command.add(String.format("%d", nextJob.getDatabaseIndex()));
 		int jobId2 = randomJobId.nextInt(10000); // generate a new random up to 4 digit integer
-		command.add(NetworkSender.ID2);
+//		command.add(NetworkSender.ID2);
+		command.add(NETJOBID2);
 		command.add(String.format("%d", jobId2));
 		jobInfo.setJobId2(jobId2);
 
@@ -934,10 +940,12 @@ public class BatchControl extends PamControlledUnit implements PamSettings {
 		command.add("-multicast");
 		command.add(batchParameters.getMulticastAddress());
 		command.add(String.format("%d", batchParameters.getMulticastPort()));
-		command.add(NetworkSender.ID1);
+//		command.add(NetworkSender.ID1);
+		command.add(NETJOBID1);
 		command.add(String.format("%d", nextJob.getDatabaseIndex()));
 		int jobId2 = randomJobId.nextInt(10000); // generate a new random up to 4 digit integer
-		command.add(NetworkSender.ID2);
+//		command.add(NetworkSender.ID2);
+		command.add(NETJOBID2);
 		command.add(String.format("%d", jobId2));
 		jobInfo.setJobId2(jobId2);
 
